@@ -257,3 +257,32 @@ The platform provides a **step-by-step guided workflow**:
 ## 🏁 Conclusion
 
 This platform bridges the gap between **offline shops and digital presence**, enabling shopkeepers to build, manage, and grow their business online with ease.
+
+---
+
+## 🚀 Deployment on Render (Unified)
+
+To deploy the entire platform as a single Web Service on Render:
+
+1. **Connect your GitHub repo** to Render.
+2. **Build Command**: `npm run build` (This runs the frontend build).
+3. **Start Command**: `npm start` (This starts the backend, which serves the frontend).
+4. **Environment Variables**:
+   - `NODE_ENV`: `production`
+   - `MONGODB_URI`: Your MongoDB connection string
+   - `JWT_SECRET`: A secure secret key
+   - `ANTHROPIC_API_KEY`: Your Anthropic API key
+
+## 🚀 Deployment (Separate Services)
+
+If you prefer to deploy them separately:
+
+### Backend (Web Service)
+- **Root Directory**: `backend`
+- **Build Command**: `npm install`
+- **Start Command**: `npm start`
+
+### Frontend (Static Site)
+- **Root Directory**: `frontend`
+- **Build Command**: `npm run build`
+- **Publish Directory**: `dist`
