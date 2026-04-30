@@ -1,3 +1,4 @@
+import SEO from '../../components/common/SEO';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -57,6 +58,25 @@ const DEMO_STORES = [
 const DemoStores = () => {
   return (
     <div className="min-h-screen bg-gray-50 pt-32 pb-20 px-6">
+      <SEO
+        title="Demo Stores | DigiDukan — See Local Shops Go Digital"
+        description="Explore live demo stores of local Indian businesses on DigiDukan. See how kirana shops, bakeries, and small businesses look online in minutes."
+        keywords="demo online store india, digidukan demo, kirana store online, local business website demo, digital dukan examples"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "name": "DigiDukan Demo Stores",
+          "description": "Live demo stores of local Indian businesses powered by DigiDukan",
+          "url": "https://digidukan.com/demo-stores",
+          "itemListElement": DEMO_STORES.map((store, i) => ({
+            "@type": "ListItem",
+            "position": i + 1,
+            "name": store.name,
+            "url": `https://digidukan.com/store/${store.slug}`
+          }))
+        }}
+      />
+
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-20">
           <motion.h1 

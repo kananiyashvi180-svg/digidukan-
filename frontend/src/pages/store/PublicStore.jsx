@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { ShoppingBag, MessageCircle, Phone, MapPin, Share2, Star, ChevronRight, Plus, Store } from 'lucide-react';
+import SEO from '../../components/common/SEO';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 const API_URL = `${BASE_URL}/api/v1`;
@@ -42,8 +43,28 @@ const PublicStore = () => {
     </div>
   );
 
+  const structuredData = shop ? {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": shop.name,
+    "telephone": shop.owner?.phone,
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": shop.location || "India"
+    },
+    "openingHours": "Mo-Su 08:00-20:00"
+  } : null;
+
   return (
     <div className="min-h-screen bg-white font-sans selection:bg-blue-100">
+      {shop && (
+        <SEO 
+          title={`${shop.name} | DigiDukan`}
+          description={`Visit ${shop.name} for products, offers and contact details.`}
+          image={shop.logo}
+          structuredData={structuredData}
+        />
+      )}
       {/* Dynamic Header based on Template Color */}
       <header className="relative pt-32 pb-20 px-6 overflow-hidden" style={{ backgroundColor: shop.color || '#111827' }}>
         <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import SEO from '../../components/common/SEO';
 import { motion, AnimatePresence } from 'framer-motion';
 import VoiceRecorder from '../../components/common/VoiceRecorder';
 import axios from 'axios';
@@ -91,6 +92,11 @@ const CreateStore = () => {
 
   return (
     <div className="min-h-screen bg-gray-50/50 pt-24 pb-12 px-6">
+      <SEO 
+        title="Create Your Store | DigiDukan" 
+        description="Launch your digital dukan in minutes using voice or text."
+        noIndex={true}
+      />
       <div className="max-w-4xl mx-auto">
         {/* Progress Header */}
         <div className="mb-12">
