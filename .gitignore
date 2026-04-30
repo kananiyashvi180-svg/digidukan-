@@ -6,3 +6,5 @@ dist/
 build/
 .DS_Store
 check_db.js
+package.json
+package-lock.json
