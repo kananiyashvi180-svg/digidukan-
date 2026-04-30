@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /handler
+Disallow: /create-store
+
+Sitemap: https://digidukan.com/sitemap.xml

@@ -1,3 +1,4 @@
+import SEO from '../../components/common/SEO';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
@@ -59,6 +60,13 @@ const RegisterPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-6 py-12" style={{ backgroundColor: '#f9fafb' }}>
+      <SEO
+        title="Create Account | DigiDukan — Start Your Online Store for Free"
+        description="Join 50,000+ local shopkeepers on DigiDukan. Sign up for free and create your professional online store in minutes — no coding, just speaking."
+        keywords="digidukan register, create online store india, free kirana website, start digital dukan, local shop signup"
+        noIndex={true}
+      />
+
       <div className="max-w-md w-full p-10 rounded-[32px] bg-white shadow-2xl shadow-gray-200 border border-gray-100">
         <div className="text-center mb-10">
           <h2 className="text-4xl font-bold text-gray-900" style={{ fontFamily: 'Outfit, sans-serif' }}>Create Account</h2>

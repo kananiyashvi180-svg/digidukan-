@@ -1,3 +1,4 @@
+import SEO from '../../components/common/SEO';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -6,6 +7,14 @@ import { Mic, Globe, Zap, Shield, ChevronRight, PlayCircle, Star, MessageCircle,
 const LandingPage = () => {
   return (
     <div className="min-h-screen bg-white text-gray-900 overflow-hidden font-sans">
+      <SEO title="DigiDukan | Apni Dukaan Online Lao" description="Local shopkeepers can create their own online store using voice or text." keywords="digidukan, local shop website, rural ecommerce, kirana website" structuredData={{
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "DigiDukan",
+      "url": "https://digidukan.com",
+      "logo": "https://digidukan.com/favicon.ico"
+    }} />
+
       {/* Hero Section */}
       <section className="relative pt-40 pb-20 px-6 overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 overflow-hidden">

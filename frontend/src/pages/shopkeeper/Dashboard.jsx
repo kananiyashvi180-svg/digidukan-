@@ -1,3 +1,4 @@
+import SEO from '../../components/common/SEO';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -31,6 +32,13 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans" style={{ backgroundColor: '#f9fafb' }}>
+      <SEO
+        title="My Dashboard | DigiDukan — Shopkeeper Portal"
+        description="Manage your DigiDukan digital store — view orders, update products, track visitors, and grow your local business online."
+        keywords="digidukan dashboard, manage online shop, shopkeeper portal, digital dukan management"
+        noIndex={true}
+      />
+
       {/* Top Navbar */}
       <nav className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-8 sticky top-0 z-40 shadow-sm" style={{ backgroundColor: 'white' }}>
         <div className="flex items-center space-x-4">

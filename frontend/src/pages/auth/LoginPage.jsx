@@ -1,3 +1,4 @@
+import SEO from '../../components/common/SEO';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
@@ -53,6 +54,13 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-6" style={{ backgroundColor: '#f9fafb' }}>
+      <SEO
+        title="Login | DigiDukan — Apni Dukaan Online Lao"
+        description="Login to your DigiDukan account to manage your digital shop, products, and customer orders from one easy dashboard."
+        keywords="digidukan login, shopkeeper login, digital dukan, manage online store"
+        noIndex={true}
+      />
+
       <div className="max-w-md w-full p-10 rounded-[32px] bg-white shadow-2xl shadow-gray-200 border border-gray-100">
         <div className="text-center mb-10">
           <h2 className="text-4xl font-bold text-gray-900" style={{ fontFamily: 'Outfit, sans-serif' }}>Welcome Back</h2>

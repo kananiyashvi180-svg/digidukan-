@@ -1,3 +1,4 @@
+import SEO from '../../components/common/SEO';
 import React, { useEffect, useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -62,6 +63,13 @@ const HandlerDashboard = () => {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col font-sans pb-20">
+      <SEO
+        title="Handler Admin | DigiDukan — Store Approval Dashboard"
+        description="DigiDukan handler dashboard for approving store requests, managing shopkeepers, and overseeing platform operations."
+        keywords="digidukan admin, handler dashboard, store approval, platform management"
+        noIndex={true}
+      />
+
       {/* Sub Header / Tab Nav */}
       <div className="h-20 bg-black/40 backdrop-blur-2xl border-b border-white/5 flex items-center justify-between px-12 sticky top-20 z-30">
         <div className="flex items-center space-x-12">
