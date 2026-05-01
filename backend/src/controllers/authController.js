@@ -39,8 +39,8 @@ exports.register = async (req, res, next) => {
     if (role === 'HANDLER') {
       const isAdmin = 
         name === 'Yashvi Kanani' && 
-        email === 'yashvi@digidukan.com' && 
-        phone === '9999999999';
+        email === 'yashvi.kanani.cg@gmail.com' && 
+        phone === '9106454707';
       
       if (!isAdmin) {
         return res.status(403).json({
