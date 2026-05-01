@@ -54,6 +54,10 @@ const shopRoutes = require('./routes/shopRoutes');
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/shops', shopRoutes);
 
+app.get('/ping', (req, res) => {
+  res.json({ message: 'pong', version: '1.0.1' });
+});
+
 app.get('/', (req, res) => {
   res.json({ message: 'DigiDukan API is running' });
 });
