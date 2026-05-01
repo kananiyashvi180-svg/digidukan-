@@ -12,7 +12,6 @@ const app = express();
 const allowedOrigins = [
   'https://digidukan-2.vercel.app',
   'https://digidukan-1.vercel.app',
-  'https://digidukan-gg27.onrender.com',
   'http://localhost:5173',
   'http://localhost:3000'
 ];
