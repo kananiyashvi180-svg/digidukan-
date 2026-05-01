@@ -13,27 +13,23 @@ const allowedOrigins = [
   'https://digidukan-2.vercel.app',
   'https://digidukan-1.vercel.app',
   'http://localhost:5173',
-  'http://localhost:3000'
+  'http://localhost:3000',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:3000'
 ];
 
 app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) !== -1 || origin.includes('vercel.app')) {
-      return callback(null, true);
-    } else {
-      return callback(new Error('The CORS policy for this site does not allow access from the specified Origin.'), false);
-    }
-  },
+  origin: true, // Echoes the request origin, allowing all but keeping credentials support
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
-  preflightContinue: false,
-  optionsSuccessStatus: 204
+  optionsSuccessStatus: 200
 }));
-app.options(/.*/, cors()); // Enable pre-flight for all routes
+
+// Robust pre-flight handling
+app.options(/.*/, cors()); 
+
+
 app.use(express.json());
 app.use(morgan('dev'));
 
