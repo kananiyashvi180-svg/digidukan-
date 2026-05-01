@@ -125,3 +125,21 @@ exports.getMe = async (req, res, next) => {
     });
   }
 };
+
+exports.getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find().select('-password').sort('-createdAt');
+    res.status(200).json({
+      status: 'success',
+      results: users.length,
+      data: {
+        users
+      }
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err.message
+    });
+  }
+};
