@@ -2,7 +2,8 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
 const signToken = (id, role) => {
-  return jwt.sign({ id, role }, process.env.JWT_SECRET, {
+  const secret = process.env.JWT_SECRET || 'fallback-secret-for-early-deployment-only';
+  return jwt.sign({ id, role }, secret, {
     expiresIn: process.env.JWT_EXPIRES_IN || '30d'
   });
 };
@@ -49,9 +50,6 @@ exports.register = async (req, res, next) => {
       }
     }
 
-    // Provide default secret if missing in environment (for early deployment convenience)
-    const secret = process.env.JWT_SECRET || 'fallback-secret-for-early-deployment-only';
-
     const newUser = await User.create({
       name,
       email,
@@ -60,20 +58,7 @@ exports.register = async (req, res, next) => {
       phone
     });
 
-    const token = jwt.sign({ id: newUser._id, role: newUser.role }, secret, {
-      expiresIn: process.env.JWT_EXPIRES_IN || '30d'
-    });
-
-    // Remove password from output
-    newUser.password = undefined;
-
-    res.status(201).json({
-      status: 'success',
-      token,
-      data: {
-        user: newUser
-      }
-    });
+    sendToken(newUser, 201, res);
   } catch (err) {
     console.error('REGISTRATION ERROR:', err);
     
