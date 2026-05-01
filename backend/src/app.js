@@ -33,7 +33,7 @@ app.use(cors({
   preflightContinue: false,
   optionsSuccessStatus: 204
 }));
-app.options('*', cors()); // Enable pre-flight for all routes
+app.options(/.*/, cors()); // Enable pre-flight for all routes
 app.use(express.json());
 app.use(morgan('dev'));
 
