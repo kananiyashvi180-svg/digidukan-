@@ -26,12 +26,20 @@ exports.register = async (req, res, next) => {
   try {
     const { name, email, password, role, phone } = req.body;
 
+    // Basic Validation
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Please provide name, email and password'
+      });
+    }
+
     // Strict Restriction for HANDLER role
     if (role === 'HANDLER') {
       const isAdmin = 
         name === 'Yashvi Kanani' && 
         email === 'yashvi@digidukan.com' && 
-        phone === '9999999999'; // Example, should be matched with real admin info if provided
+        phone === '9999999999';
       
       if (!isAdmin) {
         return res.status(403).json({
@@ -41,6 +49,9 @@ exports.register = async (req, res, next) => {
       }
     }
 
+    // Provide default secret if missing in environment (for early deployment convenience)
+    const secret = process.env.JWT_SECRET || 'fallback-secret-for-early-deployment-only';
+
     const newUser = await User.create({
       name,
       email,
@@ -49,22 +60,37 @@ exports.register = async (req, res, next) => {
       phone
     });
 
-    sendToken(newUser, 201, res);
-  } catch (err) {
+    const token = jwt.sign({ id: newUser._id, role: newUser.role }, secret, {
+      expiresIn: process.env.JWT_EXPIRES_IN || '30d'
+    });
 
-    console.error('--- REGISTRATION ERROR DETAILS ---');
-    console.error('Message:', err.message);
-    console.error('Stack:', err.stack);
-    console.error('Code:', err.code);
+    // Remove password from output
+    newUser.password = undefined;
+
+    res.status(201).json({
+      status: 'success',
+      token,
+      data: {
+        user: newUser
+      }
+    });
+  } catch (err) {
+    console.error('REGISTRATION ERROR:', err);
     
-    let message = err.message;
+    let message = 'An error occurred during registration';
+    
     if (err.code === 11000) {
       message = 'This email is already registered. Please login or use another email.';
+    } else if (err.name === 'ValidationError') {
+      const messages = Object.values(err.errors).map(val => val.message);
+      message = `Invalid input data: ${messages.join('. ')}`;
+    } else {
+      message = err.message;
     }
 
     res.status(400).json({
       status: 'fail',
-      message: message || 'An error occurred during registration'
+      message
     });
   }
 };
