@@ -12,7 +12,6 @@ const connectDB = async () => {
   if (!cached.promise) {
     const uri = process.env.MONGODB_URI || "mongodb+srv://yashvi257:yashvi257@cluster0.v0jpuyu.mongodb.net/digidukan?appName=Cluster0";
     const opts = {
-      bufferCommands: false,
       serverSelectionTimeoutMS: 10000,
     };
 

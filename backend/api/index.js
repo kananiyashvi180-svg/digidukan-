@@ -1,7 +1,16 @@
 const app = require('../src/app');
 const connectDB = require('../src/config/db');
 
-// Connect to DB on every cold start
-connectDB().catch(err => console.error('DB connection failed:', err.message));
+// Middleware: ensure DB is connected before every request
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error('DB Connection failed:', err.message);
+    res.status(503).json({ status: 'error', message: 'Database connection failed. Please try again.' });
+  }
+});
 
 module.exports = app;
+
