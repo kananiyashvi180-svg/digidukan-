@@ -16,8 +16,8 @@ const app = express();
 // Middleware
 const allowedOrigins = [
   'https://digidukan-frontend.vercel.app',
-  'https://digidukan-2.vercel.app',
-  'https://digidukan-1.vercel.app',
+  'https://digidukan-backend.vercel.app',
+
   'http://localhost:5173',
   'http://localhost:3000',
   'http://127.0.0.1:5173',
@@ -25,7 +25,22 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-  origin: true, // Echoes the request origin, allowing all but keeping credentials support
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'https://digidukan-frontend.vercel.app',
+      'https://digidukan-2.vercel.app',
+      'https://digidukan-1.vercel.app',
+      'http://localhost:5173',
+      'http://localhost:3000',
+      'http://127.0.0.1:5173',
+      'http://127.0.0.1:3000'
+    ];
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
@@ -33,7 +48,7 @@ app.use(cors({
 }));
 
 // Robust pre-flight handling
-app.options(/.*/, cors()); 
+app.options(/.*/, cors());
 
 
 app.use(express.json());
@@ -87,19 +102,19 @@ app.use((err, req, res, next) => {
 if (process.env.NODE_ENV === 'production') {
   const frontendPath = path.join(__dirname, '../../frontend/dist');
   const fs = require('fs');
-  
+
   if (fs.existsSync(frontendPath)) {
     app.use(express.static(frontendPath));
-    
+
     app.use((req, res) => {
       res.sendFile(path.resolve(frontendPath, 'index.html'));
     });
   } else {
     app.get('*', (req, res) => {
       if (!req.path.startsWith('/api')) {
-        res.status(404).json({ 
-          status: 'error', 
-          message: 'Backend is running, but frontend files were not found in this deployment. If you are using separate deployments, this is normal.' 
+        res.status(404).json({
+          status: 'error',
+          message: 'Backend is running, but frontend files were not found in this deployment. If you are using separate deployments, this is normal.'
         });
       }
     });
