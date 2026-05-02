@@ -9,7 +9,8 @@ import Dashboard from './pages/shopkeeper/Dashboard';
 import HandlerDashboard from './pages/handler/HandlerDashboard';
 import CreateStore from './pages/shopkeeper/CreateStore';
 import PublicStore from './pages/store/PublicStore';
-import DemoStores from './pages/store/DemoStores';
+import DemoStoresPage from './pages/demoStores/DemoStoresPage';
+import StoreDetailsPage from './pages/demoStores/StoreDetailsPage';
 import PrivateRoute from './components/common/PrivateRoute';
 import RoleRoute from './components/common/RoleRoute';
 import ScrollToTop from './components/common/ScrollToTop';
@@ -57,7 +58,11 @@ function App() {
         },
         {
           path: '/demo-stores',
-          element: <DemoStores />,
+          element: <DemoStoresPage />,
+        },
+        {
+          path: '/demo-store/:slug',
+          element: <StoreDetailsPage />,
         },
         {
           path: '/store/:slug',
