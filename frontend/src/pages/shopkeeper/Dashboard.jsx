@@ -97,7 +97,8 @@ const Dashboard = () => {
         <Link to="/" className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center text-white font-bold">D</div>
           <span className="font-bold text-lg">DigiDukan</span>
-        </header>
+        </Link>
+      </header>
 
       {/* Mobile Bottom Navigation */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-6 h-16 flex items-center justify-between z-50">
