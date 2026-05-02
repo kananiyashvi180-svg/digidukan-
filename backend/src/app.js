@@ -15,6 +15,7 @@ const app = express();
 
 // Middleware
 const allowedOrigins = [
+  'https://digidukan-frontend.vercel.app',
   'https://digidukan-2.vercel.app',
   'https://digidukan-1.vercel.app',
   'http://localhost:5173',
