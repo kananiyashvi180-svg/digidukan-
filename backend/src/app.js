@@ -13,27 +13,48 @@ connectDB();
 
 const app = express();
 
-// Middleware
-const allowedOrigins = [
-  'https://digidukan-2.vercel.app',
-  'https://digidukan-1.vercel.app',
-  'http://localhost:5173',
-  'http://localhost:3000',
-  'http://127.0.0.1:5173',
-  'http://127.0.0.1:3000'
-];
+// 1. ADVANCED CORS MIDDLEWARE (MUST BE FIRST)
+app.use((req, res, next) => {
+  const allowedOrigins = [
+    'https://digidukan-frontend.vercel.app',
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:3000'
+  ];
+  
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization');
 
+  // Handle Preflight (OPTIONS)
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+  next();
+});
+
+// 2. SECONDARY CORS PROTECTION
 app.use(cors({
-  origin: true, // Echoes the request origin, allowing all but keeping credentials support
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
-  optionsSuccessStatus: 200
+  origin: (origin, callback) => {
+    const allowed = [
+      'https://digidukan-frontend.vercel.app',
+      'http://localhost:5173',
+      'http://localhost:3000'
+    ];
+    if (!origin || allowed.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
 }));
-
-// Robust pre-flight handling
-app.options(/.*/, cors()); 
-
 
 app.use(express.json());
 app.use(morgan('dev'));
@@ -86,19 +107,19 @@ app.use((err, req, res, next) => {
 if (process.env.NODE_ENV === 'production') {
   const frontendPath = path.join(__dirname, '../../frontend/dist');
   const fs = require('fs');
-  
+
   if (fs.existsSync(frontendPath)) {
     app.use(express.static(frontendPath));
-    
+
     app.use((req, res) => {
       res.sendFile(path.resolve(frontendPath, 'index.html'));
     });
   } else {
     app.get('*', (req, res) => {
       if (!req.path.startsWith('/api')) {
-        res.status(404).json({ 
-          status: 'error', 
-          message: 'Backend is running, but frontend files were not found in this deployment. If you are using separate deployments, this is normal.' 
+        res.status(404).json({
+          status: 'error',
+          message: 'Backend is running, but frontend files were not found in this deployment. If you are using separate deployments, this is normal.'
         });
       }
     });

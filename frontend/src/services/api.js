@@ -6,6 +6,7 @@ const API_URL = `${BASE_URL}/api/v1`;
 
 const api = axios.create({
   baseURL: API_URL,
+  withCredentials: true,
 });
 
 // Request interceptor

@@ -1,5 +1,6 @@
 const app = require('../src/app');
 const connectDB = require('../src/config/db');
+const cors = require('cors');
 
 // Middleware: ensure DB is connected before every request
 app.use(async (req, res, next) => {
