@@ -26,7 +26,8 @@ const userSchema = new mongoose.Schema({
     type: String
   }
 }, {
-  timestamps: true
+  timestamps: true,
+  bufferCommands: false // Disable buffering so it fails fast if not connected
 });
 
 // Hash password before saving
