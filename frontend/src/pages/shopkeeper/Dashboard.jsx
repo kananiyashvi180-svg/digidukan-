@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { Store, Package, MessageSquare, BarChart3, ExternalLink, Plus, Layout, Settings, LogOut, Menu, X, Smartphone, Home } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://digidukan-backend.vercel.app';
 const API_URL = `${BASE_URL}/api/v1`;
 
 const Dashboard = () => {
@@ -23,7 +23,7 @@ const Dashboard = () => {
           axios.get(`${API_URL}/shops`, { headers: { Authorization: `Bearer ${token}` } }),
           axios.get(`${API_URL}/shops/analytics`, { headers: { Authorization: `Bearer ${token}` } })
         ]);
-        
+
         setShops(shopsRes.data.data.shops);
         setStats(statsRes.data.data);
       } catch (error) {
@@ -58,15 +58,14 @@ const Dashboard = () => {
             <div className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center text-white font-bold text-xl">D</div>
             <span className="text-2xl font-bold tracking-tight text-gray-900">DigiDukan</span>
           </Link>
-          
+
           <nav className="space-y-2">
             {navItems.map((item) => (
-              <Link 
-                key={item.name} 
-                to={item.path} 
-                className={`flex items-center space-x-3 p-4 rounded-2xl font-bold transition-all ${
-                  item.name === 'Overview' ? 'bg-gray-900 text-white shadow-xl shadow-gray-200' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
-                }`}
+              <Link
+                key={item.name}
+                to={item.path}
+                className={`flex items-center space-x-3 p-4 rounded-2xl font-bold transition-all ${item.name === 'Overview' ? 'bg-gray-900 text-white shadow-xl shadow-gray-200' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
+                  }`}
               >
                 <item.icon size={20} />
                 <span>{item.name}</span>
@@ -74,7 +73,7 @@ const Dashboard = () => {
             ))}
           </nav>
         </div>
-        
+
         <div className="mt-auto p-8 border-t border-gray-50">
           <div className="flex items-center space-x-4 mb-6">
             <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center font-bold text-xl">
@@ -150,7 +149,7 @@ const Dashboard = () => {
               { label: 'Shops', value: stats.totalShops, icon: Store, color: 'text-green-600', bg: 'bg-green-50' },
               { label: 'Queries', value: stats.newQueries, icon: MessageSquare, color: 'text-orange-600', bg: 'bg-orange-50' },
             ].map((stat, i) => (
-              <motion.div 
+              <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -177,7 +176,7 @@ const Dashboard = () => {
                 <span>Add Store</span>
               </Link>
             </div>
-            
+
             <div className="p-4 sm:p-0">
               {loading ? (
                 <div className="p-20 text-center text-gray-400 flex flex-col items-center gap-4">
@@ -192,8 +191,8 @@ const Dashboard = () => {
                   <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Build your first store</h3>
                   <p className="text-gray-500 mb-8 max-w-sm mx-auto">Create a beautiful online presence for your business in just 2 minutes.</p>
                   <Link to="/create-store" className="btn-primary">
-                     <Plus size={20} />
-                     <span>Start Creation</span>
+                    <Plus size={20} />
+                    <span>Start Creation</span>
                   </Link>
                 </div>
               ) : (
@@ -211,16 +210,15 @@ const Dashboard = () => {
                         <div className="text-center sm:text-left">
                           <h3 className="font-bold text-gray-900 text-xl sm:text-2xl mb-2">{shop.name}</h3>
                           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3">
-                            <span className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                              shop.status === 'LIVE' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
-                            }`}>
+                            <span className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${shop.status === 'LIVE' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+                              }`}>
                               {shop.status}
                             </span>
                             <span className="text-xs text-gray-400 font-bold uppercase tracking-widest">{shop.category}</span>
                           </div>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center gap-3 w-full sm:w-auto">
                         <Link to={`/store/${shop.slug}`} target="_blank" className="flex-1 sm:flex-none w-12 h-12 flex items-center justify-center text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-2xl transition-all border border-gray-100">
                           <ExternalLink size={20} />

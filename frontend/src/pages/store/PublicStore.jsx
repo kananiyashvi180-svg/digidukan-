@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { ShoppingBag, MessageCircle, Phone, MapPin, Share2, Star, ChevronRight, Plus, Store, Clock, Heart } from 'lucide-react';
 import SEO from '../../components/common/SEO';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://digidukan-backend.vercel.app';
 const API_URL = `${BASE_URL}/api/v1`;
 
 const PublicStore = () => {

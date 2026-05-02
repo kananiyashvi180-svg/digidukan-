@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { ShoppingBag, Sparkles, Layout, CheckCircle, ArrowRight, Loader2, ChevronLeft, Mic } from 'lucide-react';
 import { RURAL_TEMPLATES } from '../../constants/templates';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://digidukan-backend.vercel.app';
 const API_URL = `${BASE_URL}/api/v1`;
 
 const CreateStore = () => {
