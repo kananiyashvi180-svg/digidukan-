@@ -102,9 +102,14 @@ exports.login = async (req, res, next) => {
 
     sendToken(user, 200, res);
   } catch (err) {
+    console.error('LOGIN ERROR:', err);
+    let message = err.message;
+    if (err.name === 'MongooseError' || err.message.includes('buffering timed out')) {
+      message = 'Database connection error. Please ensure your IP is whitelisted in MongoDB Atlas.';
+    }
     res.status(400).json({
       status: 'fail',
-      message: err.message
+      message
     });
   }
 };
