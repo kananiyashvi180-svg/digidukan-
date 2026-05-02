@@ -1,34 +1,99 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
 
-/* Basic reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Inter', sans-serif;
-  background-color: #f9fafb !important;
-  color: #111827;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Outfit', sans-serif;
-}
-
-/* Tailwind directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+    @apply antialiased;
+  }
+  
+  body {
+    @apply font-sans bg-gray-50 text-gray-900 overflow-x-hidden;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight text-gray-900;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  /* Responsive Typography Scaling */
+  .text-hero {
+    @apply text-[2.5rem] leading-[1.1] font-bold tracking-tight
+           sm:text-5xl 
+           md:text-6xl 
+           lg:text-7xl lg:leading-[1.05];
+  }
+
+  .text-section-title {
+    @apply text-3xl font-bold tracking-tight
+           md:text-4xl 
+           lg:text-5xl;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
 @layer components {
+  .container-custom {
+    @apply w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-12;
+  }
+
   .btn-primary {
-    @apply bg-blue-600 text-white px-8 py-3 rounded-2xl font-bold transition-all hover:bg-blue-700 shadow-lg !important;
+    @apply inline-flex items-center justify-center gap-2.5 
+           bg-gray-900 text-white 
+           px-6 py-3.5 sm:px-8 sm:py-4
+           rounded-2xl sm:rounded-[1.25rem] 
+           font-bold text-sm sm:text-base
+           transition-all duration-300
+           hover:bg-gray-800 hover:shadow-xl hover:shadow-gray-900/10 
+           active:scale-[0.98] 
+           disabled:opacity-50 disabled:pointer-events-none 
+           w-full sm:w-auto;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2.5 
+           bg-white text-gray-900 border border-gray-200
+           px-6 py-3.5 sm:px-8 sm:py-4
+           rounded-2xl sm:rounded-[1.25rem] 
+           font-bold text-sm sm:text-base
+           transition-all duration-300
+           hover:bg-gray-50 hover:border-gray-300
+           active:scale-[0.98] 
+           w-full sm:w-auto;
+  }
+
+  .card-responsive {
+    @apply bg-white rounded-[2rem] sm:rounded-[2.5rem] 
+           p-6 sm:p-8 md:p-10 
+           border border-gray-100 shadow-sm 
+           transition-all duration-300 
+           hover:shadow-2xl hover:shadow-gray-200/50 hover:-translate-y-1.5;
+  }
+
+  .input-responsive {
+    @apply w-full px-5 py-4 rounded-2xl 
+           border border-gray-200 
+           focus:ring-4 focus:ring-gray-900/5 focus:border-gray-900 focus:bg-white
+           outline-none transition-all duration-300
+           placeholder:text-gray-400 bg-gray-50/50 
+           text-base min-h-[56px];
   }
 
   .glass {
-    @apply bg-white/80 backdrop-blur-xl border border-gray-100 shadow-2xl !important;
+    @apply bg-white/70 backdrop-blur-2xl border border-white/20 shadow-2xl;
+  }
+
+  /* Responsive Spacing Utilities */
+  .section-padding {
+    @apply py-16 sm:py-24 lg:py-32;
   }
 
   .no-scrollbar::-webkit-scrollbar {
@@ -45,6 +110,39 @@ h1, h2, h3, h4, h5, h6 {
   }
   .animate-marquee {
     display: flex;
-    animation: marquee 20s linear infinite;
+    animation: marquee 30s linear infinite;
+  }
+}
+
+/* Responsive Table Helper */
+.table-responsive-wrapper {
+  @apply overflow-x-auto -mx-5 px-5 sm:mx-0 sm:px-0;
+}
+
+@media (max-width: 640px) {
+  .table-to-cards thead {
+    @apply hidden;
+  }
+  .table-to-cards tr {
+    @apply block bg-white rounded-3xl p-6 mb-4 border border-gray-100 shadow-sm;
+  }
+  .table-to-cards td {
+    @apply flex justify-between items-center py-3 border-b border-gray-50 last:border-0;
+  }
+  .table-to-cards td::before {
+    content: attr(data-label);
+    @apply font-bold text-gray-400 text-[10px] uppercase tracking-widest;
+  }
+}
+
+/* Mobile-First Layout Grid */
+.responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 1.5rem;
+}
+@media (min-width: 640px) {
+  .responsive-grid {
+    gap: 2rem;
   }
 }

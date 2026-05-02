@@ -6,7 +6,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { ShoppingBag, Sparkles, Layout, CheckCircle, ArrowRight, Loader2 } from 'lucide-react';
+import { ShoppingBag, Sparkles, Layout, CheckCircle, ArrowRight, Loader2, ChevronLeft, Mic } from 'lucide-react';
 import { RURAL_TEMPLATES } from '../../constants/templates';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
@@ -91,27 +91,35 @@ const CreateStore = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50/50 pt-24 pb-12 px-6">
+    <div className="min-h-screen bg-gray-50/50 py-8 sm:py-12 md:py-20">
       <SEO 
         title="Create Your Store | DigiDukan" 
         description="Launch your digital dukan in minutes using voice or text."
         noIndex={true}
       />
-      <div className="max-w-4xl mx-auto">
+      <div className="container-custom max-w-4xl">
         {/* Progress Header */}
-        <div className="mb-12">
-          <div className="flex justify-between items-end mb-4">
-            <div>
-              <h1 className="text-4xl font-display font-bold text-gray-900 mb-2">Build Your Digital Presence</h1>
-              <p className="text-gray-500 font-medium">Step {step} of 4: {
+        <div className="mb-8 sm:mb-12">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 mb-6 sm:mb-8">
+            <div className="w-full sm:w-auto">
+              <Link to="/dashboard" className="inline-flex items-center space-x-1 text-gray-400 hover:text-gray-900 font-bold text-xs uppercase tracking-widest mb-4 group transition-colors">
+                <ChevronLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
+                <span>Dashboard</span>
+              </Link>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 tracking-tight leading-tight">Setup Your <span className="text-blue-600">Digital Dukan</span></h1>
+              <p className="text-gray-500 mt-2 font-medium">Step {step} of 4: <span className="text-gray-900">{
                 step === 1 ? 'Voice Generation' : 
                 step === 2 ? 'Review Details' : 
                 step === 3 ? 'Choose Style' : 'Final Launch'
-              }</p>
+              }</span></p>
             </div>
-            <div className="flex space-x-2 pb-2">
+            
+            {/* Horizontal Progress Bar */}
+            <div className="flex items-center space-x-2 w-full sm:w-auto">
               {[1, 2, 3, 4].map(i => (
-                <div key={i} className={`h-2 w-16 rounded-full transition-all duration-500 ${step >= i ? 'bg-blue-600' : 'bg-gray-200'}`} />
+                <div key={i} className="flex-1 sm:flex-none">
+                  <div className={`h-2 sm:w-16 rounded-full transition-all duration-700 ${step >= i ? 'bg-blue-600' : 'bg-gray-200'}`} />
+                </div>
               ))}
             </div>
           </div>
@@ -126,32 +134,37 @@ const CreateStore = () => {
               exit={{ opacity: 0, y: -20 }}
               className="space-y-8"
             >
-              <div className="bg-white p-12 rounded-[40px] shadow-2xl shadow-gray-200/50 border border-gray-100">
-                <div className="flex items-center space-x-4 mb-8">
-                  <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600">
-                    <Sparkles size={24} />
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold">Magical AI Builder</h2>
-                    <p className="text-gray-500">Just speak about your business in any language.</p>
-                  </div>
+              <div className="bg-white p-6 sm:p-12 rounded-[2.5rem] sm:rounded-[3rem] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden relative">
+                <div className="absolute top-0 right-0 p-8 text-blue-50/50 -mr-10 -mt-10">
+                   <Mic size={160} />
                 </div>
-                
-                <VoiceRecorder onTranscript={handleVoiceTranscript} />
-                
-                <div className="mt-10 flex items-center justify-center">
-                  <div className="h-px bg-gray-100 flex-1" />
-                  <span className="px-6 text-gray-400 text-xs font-black uppercase tracking-widest">Or go manual</span>
-                  <div className="h-px bg-gray-100 flex-1" />
+                <div className="relative z-10">
+                  <div className="flex items-center space-x-4 mb-8 sm:mb-10">
+                    <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600">
+                      <Sparkles size={24} />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold">Magical AI Builder</h2>
+                      <p className="text-gray-500 text-sm">Just speak about your business in any language.</p>
+                    </div>
+                  </div>
+                  
+                  <VoiceRecorder onTranscript={handleVoiceTranscript} />
+                  
+                  <div className="mt-12 flex items-center justify-center">
+                    <div className="h-px bg-gray-100 flex-1" />
+                    <span className="px-6 text-gray-400 text-[10px] font-black uppercase tracking-widest whitespace-nowrap">Or go manual</span>
+                    <div className="h-px bg-gray-100 flex-1" />
+                  </div>
+                  
+                  <button 
+                    onClick={() => setStep(2)}
+                    className="btn-secondary w-full mt-10 !py-4"
+                  >
+                    <Layout size={20} />
+                    <span>Enter Details Manually</span>
+                  </button>
                 </div>
-                
-                <button 
-                  onClick={() => setStep(2)}
-                  className="w-full mt-10 py-5 border-2 border-gray-100 rounded-2xl text-gray-500 font-bold hover:bg-gray-50 transition-all flex items-center justify-center space-x-2"
-                >
-                  <Layout size={20} />
-                  <span>Enter Details Manually</span>
-                </button>
               </div>
             </motion.div>
           )}
@@ -162,68 +175,72 @@ const CreateStore = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="bg-white p-12 rounded-[40px] shadow-2xl shadow-gray-200/50 space-y-8 border border-gray-100"
+              className="bg-white p-6 sm:p-10 md:p-12 rounded-[2.5rem] sm:rounded-[3rem] shadow-xl shadow-gray-200/50 space-y-8 border border-gray-100"
             >
               <h2 className="text-2xl font-bold flex items-center space-x-3">
                 <Layout className="text-blue-600" />
                 <span>Basic Dukan Details</span>
               </h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-gray-500 uppercase tracking-wider ml-1">Shop Name</label>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Shop Name</label>
                   <input 
                     name="name"
                     value={formData.name}
                     onChange={handleFormChange}
-                    className="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium"
+                    className="input-responsive"
                     placeholder="e.g. Ravi Kirana Store"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-gray-500 uppercase tracking-wider ml-1">Category</label>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Category</label>
                   <input 
                     name="category"
                     value={formData.category}
                     onChange={handleFormChange}
-                    className="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium"
+                    className="input-responsive"
                     placeholder="e.g. Kirana, Bakery"
                   />
                 </div>
                 <div className="md:col-span-2 space-y-2">
-                  <label className="text-sm font-bold text-gray-500 uppercase tracking-wider ml-1">Tagline</label>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Tagline</label>
                   <input 
                     name="tagline"
                     value={formData.tagline}
                     onChange={handleFormChange}
-                    className="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium"
+                    className="input-responsive"
                     placeholder="e.g. Fresh items at best price"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-gray-500 uppercase tracking-wider ml-1">Phone Number</label>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Phone Number</label>
                   <input 
                     name="phone"
                     value={formData.phone}
                     onChange={handleFormChange}
-                    className="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium"
+                    className="input-responsive"
+                    placeholder="10-digit mobile number"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-gray-500 uppercase tracking-wider ml-1">Opening Hours</label>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Opening Hours</label>
                   <input 
                     name="hours"
                     value={formData.hours}
                     onChange={handleFormChange}
-                    className="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium"
+                    className="input-responsive"
                     placeholder="e.g. 9 AM - 9 PM"
                   />
                 </div>
               </div>
 
-              <div className="flex justify-between pt-6 border-t border-gray-50">
-                <button onClick={() => setStep(1)} className="px-8 py-4 font-bold text-gray-400 hover:text-gray-600 transition-colors">Back</button>
-                <button onClick={() => setStep(3)} className="px-10 py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-xl shadow-blue-100 hover:scale-105 transition-all">Choose Theme</button>
+              <div className="flex flex-col sm:flex-row justify-between pt-8 border-t border-gray-50 gap-4">
+                <button onClick={() => setStep(1)} className="order-2 sm:order-1 px-8 py-4 font-bold text-gray-400 hover:text-gray-900 transition-colors">Back to Voice</button>
+                <button onClick={() => setStep(3)} className="order-1 sm:order-2 btn-primary !py-4 px-10">
+                  <span>Next Step: Choose Style</span>
+                  <ArrowRight size={20} />
+                </button>
               </div>
             </motion.div>
           )}
@@ -234,31 +251,41 @@ const CreateStore = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="bg-white p-12 rounded-[40px] shadow-2xl shadow-gray-200/50 space-y-8 border border-gray-100"
+              className="bg-white p-6 sm:p-10 md:p-12 rounded-[2.5rem] sm:rounded-[3rem] shadow-xl shadow-gray-200/50 space-y-8 border border-gray-100"
             >
-              <h2 className="text-2xl font-bold">Select Visual Style</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex items-center justify-between">
+                 <h2 className="text-2xl font-bold">Select Visual Style</h2>
+                 <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">Premium Themes</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 {RURAL_TEMPLATES.map((t) => (
                   <div 
                     key={t.id}
                     onClick={() => setFormData(prev => ({ ...prev, color: t.colors.primary, theme: t.id }))}
-                    className={`p-8 rounded-3xl border-2 cursor-pointer transition-all ${formData.theme === t.id ? 'border-blue-600 bg-blue-50/30' : 'border-gray-50 hover:border-gray-200'}`}
+                    className={`p-6 sm:p-8 rounded-[2rem] border-4 cursor-pointer transition-all ${
+                      formData.theme === t.id ? 'border-blue-600 bg-blue-50/10' : 'border-gray-50 hover:border-gray-200 bg-gray-50/50'
+                    }`}
                   >
                     <div className="flex items-center space-x-5">
-                      <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-2xl font-black shadow-lg" style={{ backgroundColor: t.colors.primary }}>
+                      <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-2xl font-black shadow-lg shrink-0" style={{ backgroundColor: t.colors.primary }}>
                         {t.name?.[0] || 'T'}
                       </div>
                       <div>
                         <p className="font-bold text-lg text-gray-900">{t.name}</p>
-                        <p className="text-sm text-gray-500 font-medium">{t.description}</p>
+                        <p className="text-sm text-gray-500 font-medium leading-tight">{t.description}</p>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="flex justify-between pt-6 border-t border-gray-50">
-                <button onClick={() => setStep(2)} className="px-8 py-4 font-bold text-gray-400 hover:text-gray-600 transition-colors">Back</button>
-                <button onClick={() => setStep(4)} className="px-10 py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-xl shadow-blue-100 hover:scale-105 transition-all">Review & Launch</button>
+
+              <div className="flex flex-col sm:flex-row justify-between pt-8 border-t border-gray-50 gap-4">
+                <button onClick={() => setStep(2)} className="order-2 sm:order-1 px-8 py-4 font-bold text-gray-400 hover:text-gray-900 transition-colors">Back to Details</button>
+                <button onClick={() => setStep(4)} className="order-1 sm:order-2 btn-primary !py-4 px-10">
+                  <span>Almost Done</span>
+                  <ArrowRight size={20} />
+                </button>
               </div>
             </motion.div>
           )}
@@ -269,50 +296,52 @@ const CreateStore = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white p-12 rounded-[40px] shadow-2xl shadow-gray-200/50 space-y-10 border border-gray-100"
+              className="bg-white p-6 sm:p-10 md:p-12 rounded-[2.5rem] sm:rounded-[3rem] shadow-xl shadow-gray-200/50 space-y-10 border border-gray-100"
             >
               <div className="text-center">
                 <div className="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <CheckCircle size={48} />
+                  <CheckCircle size={40} />
                 </div>
                 <h2 className="text-3xl font-bold text-gray-900">Your Dukan is Ready!</h2>
-                <p className="text-gray-500 font-medium">Review your digital shop identity before we go live.</p>
+                <p className="text-gray-500 font-medium mt-2">Review your digital shop identity before we go live.</p>
               </div>
               
-              <div className="bg-gray-50 p-8 rounded-[32px] grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12 border border-gray-100">
-                <div>
+              <div className="bg-gray-50 p-6 sm:p-10 rounded-[2rem] sm:rounded-[2.5rem] grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12 border border-gray-100 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100/30 blur-3xl -mr-16 -mt-16" />
+                
+                <div className="relative">
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 block mb-2">Store Name</label>
-                  <p className="text-xl font-bold text-gray-900">{formData.name}</p>
+                  <p className="text-xl sm:text-2xl font-bold text-gray-900">{formData.name}</p>
                 </div>
-                <div>
+                <div className="relative">
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 block mb-2">Category</label>
-                  <p className="text-xl font-bold text-gray-900">{formData.category}</p>
+                  <p className="text-xl sm:text-2xl font-bold text-gray-900">{formData.category}</p>
                 </div>
-                <div className="md:col-span-2">
+                <div className="md:col-span-2 relative">
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 block mb-2">Tagline</label>
-                  <p className="text-lg font-medium text-gray-700 italic">"{formData.tagline}"</p>
+                  <p className="text-lg font-medium text-gray-700 italic leading-relaxed">"{formData.tagline}"</p>
                 </div>
-                <div className="md:col-span-2">
-                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 block mb-2">Products Detected</label>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {formData.products.map((p, i) => (
-                      <span key={i} className="px-4 py-1.5 bg-white border border-gray-200 rounded-full text-xs font-bold text-gray-600">{p}</span>
-                    ))}
+                <div className="md:col-span-2 relative">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 block mb-2">Inventory Sync</label>
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {formData.products.length > 0 ? formData.products.map((p, i) => (
+                      <span key={i} className="px-4 py-2 bg-white border border-gray-100 rounded-xl text-xs font-bold text-gray-600 shadow-sm">{p}</span>
+                    )) : <span className="text-gray-400 italic font-medium">No products added yet</span>}
                   </div>
                 </div>
               </div>
 
-              <div className="flex justify-between pt-6 border-t border-gray-50">
-                <button onClick={() => setStep(3)} className="px-8 py-4 font-bold text-gray-400 hover:text-gray-600 transition-colors">Change Theme</button>
+              <div className="flex flex-col sm:flex-row justify-between pt-8 border-t border-gray-50 gap-4">
+                <button onClick={() => setStep(3)} className="order-2 sm:order-1 px-8 py-4 font-bold text-gray-400 hover:text-gray-900 transition-colors">Change Theme</button>
                 <button 
                   onClick={handleSubmit} 
                   disabled={loading}
-                  className="px-12 py-5 bg-gray-900 text-white rounded-2xl font-bold text-lg shadow-2xl flex items-center space-x-3 hover:scale-105 active:scale-95 transition-all"
+                  className="order-1 sm:order-2 btn-primary !py-5 !px-12 !text-lg"
                 >
                   {loading ? (
-                    <><Loader2 className="animate-spin" /> <span>Launching...</span></>
+                    <><Loader2 className="animate-spin" size={24} /> <span>Launching...</span></>
                   ) : (
-                    <><ShoppingBag /> <span>Confirm & Publish</span></>
+                    <><ShoppingBag size={24} /> <span>Confirm & Publish</span></>
                   )}
                 </button>
               </div>
@@ -325,4 +354,3 @@ const CreateStore = () => {
 };
 
 export default CreateStore;
-
