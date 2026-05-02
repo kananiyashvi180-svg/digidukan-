@@ -81,7 +81,7 @@ const RegisterPage = () => {
               value={name}
               onChange={onChange}
               style={inputStyle}
-              placeholder="Ravi Kumar" 
+              placeholder="John Doe" 
               required
             />
           </div>
@@ -93,7 +93,7 @@ const RegisterPage = () => {
               value={email}
               onChange={onChange}
               style={inputStyle}
-              placeholder="ravi@example.com" 
+              placeholder="john@example.com" 
               required
             />
           </div>
@@ -106,6 +106,18 @@ const RegisterPage = () => {
               onChange={onChange}
               style={inputStyle}
               placeholder="••••••••" 
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-bold text-gray-700 mb-1 ml-1">Phone Number</label>
+            <input 
+              type="tel" 
+              name="phone"
+              value={phone}
+              onChange={onChange}
+              style={inputStyle}
+              placeholder="9876543210" 
               required
             />
           </div>

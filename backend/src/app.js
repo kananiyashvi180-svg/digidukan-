@@ -4,7 +4,12 @@ const morgan = require('morgan');
 const path = require('path');
 const dotenv = require('dotenv');
 
+const connectDB = require('./config/db');
+
 dotenv.config();
+
+// Connect to Database
+connectDB();
 
 const app = express();
 
@@ -12,29 +17,24 @@ const app = express();
 const allowedOrigins = [
   'https://digidukan-2.vercel.app',
   'https://digidukan-1.vercel.app',
-  'https://digidukan-gg27.onrender.com',
   'http://localhost:5173',
-  'http://localhost:3000'
+  'http://localhost:3000',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:3000'
 ];
 
 app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) !== -1 || origin.includes('vercel.app')) {
-      return callback(null, true);
-    } else {
-      return callback(new Error('The CORS policy for this site does not allow access from the specified Origin.'), false);
-    }
-  },
+  origin: true, // Echoes the request origin, allowing all but keeping credentials support
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
-  preflightContinue: false,
-  optionsSuccessStatus: 204
+  optionsSuccessStatus: 200
 }));
-app.options('*', cors()); // Enable pre-flight for all routes
+
+// Robust pre-flight handling
+app.options(/.*/, cors()); 
+
+
 app.use(express.json());
 app.use(morgan('dev'));
 
@@ -59,6 +59,10 @@ const shopRoutes = require('./routes/shopRoutes');
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/shops', shopRoutes);
 
+app.get('/ping', (req, res) => {
+  res.json({ message: 'pong', version: '1.0.1' });
+});
+
 app.get('/', (req, res) => {
   res.json({ message: 'DigiDukan API is running' });
 });
@@ -78,13 +82,27 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Serve frontend in production
+// Serve frontend in production (Only if files exist)
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../../frontend/dist')));
+  const frontendPath = path.join(__dirname, '../../frontend/dist');
+  const fs = require('fs');
   
-  app.use((req, res) => {
-    res.sendFile(path.resolve(__dirname, '../../frontend', 'dist', 'index.html'));
-  });
+  if (fs.existsSync(frontendPath)) {
+    app.use(express.static(frontendPath));
+    
+    app.use((req, res) => {
+      res.sendFile(path.resolve(frontendPath, 'index.html'));
+    });
+  } else {
+    app.get('*', (req, res) => {
+      if (!req.path.startsWith('/api')) {
+        res.status(404).json({ 
+          status: 'error', 
+          message: 'Backend is running, but frontend files were not found in this deployment. If you are using separate deployments, this is normal.' 
+        });
+      }
+    });
+  }
 }
 
 module.exports = app;

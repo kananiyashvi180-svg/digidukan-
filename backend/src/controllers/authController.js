@@ -2,7 +2,8 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
 const signToken = (id, role) => {
-  return jwt.sign({ id, role }, process.env.JWT_SECRET, {
+  const secret = process.env.JWT_SECRET || 'fallback-secret-for-early-deployment-only';
+  return jwt.sign({ id, role }, secret, {
     expiresIn: process.env.JWT_EXPIRES_IN || '30d'
   });
 };
@@ -26,12 +27,20 @@ exports.register = async (req, res, next) => {
   try {
     const { name, email, password, role, phone } = req.body;
 
+    // Basic Validation
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Please provide name, email and password'
+      });
+    }
+
     // Strict Restriction for HANDLER role
     if (role === 'HANDLER') {
       const isAdmin = 
         name === 'Yashvi Kanani' && 
-        email === 'yashvi@digidukan.com' && 
-        phone === '9999999999'; // Example, should be matched with real admin info if provided
+        email === 'yashvi.kanani.cg@gmail.com' && 
+        phone === '9106454707';
       
       if (!isAdmin) {
         return res.status(403).json({
@@ -51,20 +60,22 @@ exports.register = async (req, res, next) => {
 
     sendToken(newUser, 201, res);
   } catch (err) {
-
-    console.error('--- REGISTRATION ERROR DETAILS ---');
-    console.error('Message:', err.message);
-    console.error('Stack:', err.stack);
-    console.error('Code:', err.code);
+    console.error('REGISTRATION ERROR:', err);
     
-    let message = err.message;
+    let message = 'An error occurred during registration';
+    
     if (err.code === 11000) {
       message = 'This email is already registered. Please login or use another email.';
+    } else if (err.name === 'ValidationError') {
+      const messages = Object.values(err.errors).map(val => val.message);
+      message = `Invalid input data: ${messages.join('. ')}`;
+    } else {
+      message = err.message;
     }
 
     res.status(400).json({
       status: 'fail',
-      message: message || 'An error occurred during registration'
+      message
     });
   }
 };
@@ -105,6 +116,24 @@ exports.getMe = async (req, res, next) => {
       status: 'success',
       data: {
         user
+      }
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err.message
+    });
+  }
+};
+
+exports.getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find().select('-password').sort('-createdAt');
+    res.status(200).json({
+      status: 'success',
+      results: users.length,
+      data: {
+        users
       }
     });
   } catch (err) {
