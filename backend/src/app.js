@@ -14,33 +14,9 @@ connectDB();
 const app = express();
 
 // Middleware
-const allowedOrigins = [
-  'https://digidukan-frontend.vercel.app',
-  'https://digidukan-backend.vercel.app',
-
-  'http://localhost:5173',
-  'http://localhost:3000',
-  'http://127.0.0.1:5173',
-  'http://127.0.0.1:3000'
-];
 
 app.use(cors({
-  origin: function (origin, callback) {
-    const allowedOrigins = [
-      'https://digidukan-frontend.vercel.app',
-      'https://digidukan-2.vercel.app',
-      'https://digidukan-1.vercel.app',
-      'http://localhost:5173',
-      'http://localhost:3000',
-      'http://127.0.0.1:5173',
-      'http://127.0.0.1:3000'
-    ];
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],

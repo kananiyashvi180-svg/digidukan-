@@ -1,24 +1,11 @@
 const app = require('../src/app');
 const connectDB = require('../src/config/db');
+const cors = require('cors');
 
 // Root level CORS for Vercel Edge handling
 app.use((req, res, next) => {
   const origin = req.headers.origin;
-  const allowedOrigins = [
-    'https://digidukan-frontend.vercel.app',
-    'https://digidukan-2.vercel.app',
-    'https://digidukan-1.vercel.app',
-    'http://localhost:5173',
-    'http://localhost:3000'
-  ];
-
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  } else {
-    // Fallback for debugging, remove in production if too open
-    res.setHeader('Access-Control-Allow-Origin', origin || '*');
-  }
-  
+  res.setHeader('Access-Control-Allow-Origin', origin || '*');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
   res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization');
