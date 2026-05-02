@@ -143,9 +143,7 @@ const HandlerDashboard = () => {
                 <button 
                   key={item.id}
                   onClick={() => { setActiveTab(item.id); setIsMobileMenuOpen(false); }}
-                  className={`flex items-center space-x-3 p-4 rounded-2xl font-bold transition-all ${
-                    activeTab === item.id ? 'bg-blue-600 text-white' : 'bg-white/5 text-white/40'
-                  }`}
+                  className={`flex items-center space-x-3 p-4 rounded-2xl font-bold transition-all ${activeTab === item.id ? 'bg-blue-600 text-white' : 'bg-white/5 text-white/40'}`}
                 >
                   <item.icon size={20} />
                   <span>{item.label}</span>
@@ -245,11 +243,7 @@ const HandlerDashboard = () => {
                         <div className="overflow-hidden">
                           <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 mb-4">
                             <h3 className="text-2xl sm:text-3xl font-black tracking-tight truncate max-w-xs">{shop.name}</h3>
-                            <span className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${
-                              shop.status === 'LIVE' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 
-                              shop.status === 'PENDING' ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' : 
-                              'bg-rose-500/10 border-rose-500/30 text-rose-400'
-                            }`}>
+                            <span className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${shop.status === 'LIVE' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : shop.status === 'PENDING' ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' : 'bg-rose-500/10 border-rose-500/30 text-rose-400'}`}>
                               {shop.status}
                             </span>
                           </div>

@@ -64,8 +64,7 @@ const Dashboard = () => {
               <Link
                 key={item.name}
                 to={item.path}
-                className={`flex items-center space-x-3 p-4 rounded-2xl font-bold transition-all ${item.name === 'Overview' ? 'bg-gray-900 text-white shadow-xl shadow-gray-200' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
-                  }`}
+                className={`flex items-center space-x-3 p-4 rounded-2xl font-bold transition-all ${item.name === 'Overview' ? 'bg-gray-900 text-white shadow-xl shadow-gray-200' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'}`}
               >
                 <item.icon size={20} />
                 <span>{item.name}</span>
@@ -210,8 +209,7 @@ const Dashboard = () => {
                         <div className="text-center sm:text-left">
                           <h3 className="font-bold text-gray-900 text-xl sm:text-2xl mb-2">{shop.name}</h3>
                           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3">
-                            <span className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${shop.status === 'LIVE' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
-                              }`}>
+                            <span className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${shop.status === 'LIVE' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
                               {shop.status}
                             </span>
                             <span className="text-xs text-gray-400 font-bold uppercase tracking-widest">{shop.category}</span>
