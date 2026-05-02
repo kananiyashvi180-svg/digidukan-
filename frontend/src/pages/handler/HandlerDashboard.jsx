@@ -285,13 +285,148 @@ const HandlerDashboard = () => {
           </div>
         )}
 
-        {activeTab !== 'requests' && (
+        {activeTab === 'users' && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-2">
+              <h2 className="text-xl sm:text-2xl font-bold flex items-center space-x-3 w-full sm:w-auto">
+                <span className="w-1.5 h-6 bg-indigo-600 rounded-full" />
+                <span>Platform Users</span>
+              </h2>
+              <div className="text-white/20 text-[10px] font-black uppercase tracking-widest w-full sm:w-auto sm:text-right">Total {users.length} registered</div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {loading ? (
+                 <div className="col-span-full py-20 text-center flex flex-col items-center gap-4">
+                    <div className="w-8 h-8 border-2 border-white/10 border-t-indigo-500 rounded-full animate-spin" />
+                    <span className="text-white/20 font-bold italic">Querying user directory...</span>
+                 </div>
+              ) : users.length === 0 ? (
+                <div className="col-span-full py-20 bg-white/[0.01] border border-white/5 rounded-[40px] text-center text-white/20">
+                  No users found in the database.
+                </div>
+              ) : (
+                users.map((u, i) => (
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: i * 0.05 }}
+                    key={u._id}
+                    className="bg-white/[0.02] border border-white/5 p-8 rounded-[40px] hover:bg-white/[0.05] transition-all group"
+                  >
+                    <div className="flex items-center space-x-6 mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-br from-indigo-500/20 to-transparent rounded-2xl flex items-center justify-center border border-white/10 text-indigo-400 font-black text-2xl">
+                        {u.name?.[0]}
+                      </div>
+                      <div className="overflow-hidden">
+                        <h3 className="text-xl font-bold truncate">{u.name}</h3>
+                        <p className="text-white/40 text-xs truncate">{u.email}</p>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
+                        <span className="text-white/20">Role</span>
+                        <span className="text-indigo-400">{u.role}</span>
+                      </div>
+                      <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
+                        <span className="text-white/20">Joined</span>
+                        <span className="text-white/60">{new Date(u.createdAt).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))
+              )}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'analytics' && (
+          <div className="space-y-12">
+            <div className="flex items-center space-x-3 px-2">
+              <span className="w-1.5 h-6 bg-emerald-600 rounded-full" />
+              <h2 className="text-xl sm:text-2xl font-bold">Platform Business Intelligence</h2>
+            </div>
+
+            {loading ? (
+               <div className="py-20 text-center flex flex-col items-center gap-4">
+                  <div className="w-8 h-8 border-2 border-white/10 border-t-emerald-500 rounded-full animate-spin" />
+                  <span className="text-white/20 font-bold italic">Synthesizing platform metrics...</span>
+               </div>
+            ) : !analytics ? (
+              <div className="py-20 bg-white/[0.01] border border-white/5 rounded-[40px] text-center text-white/20">
+                Analytics data temporarily unavailable.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="bg-white/[0.02] border border-white/5 p-10 rounded-[40px] space-y-8">
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white/30">Store Distribution</h3>
+                  <div className="space-y-6">
+                    {[
+                      { label: 'Live Sites', count: analytics.stats?.liveShops || 0, color: 'bg-emerald-500', total: analytics.stats?.totalShops || 1 },
+                      { label: 'Pending Approval', count: analytics.stats?.pendingShops || 0, color: 'bg-amber-500', total: analytics.stats?.totalShops || 1 },
+                      { label: 'Rejected', count: analytics.stats?.rejectedShops || 0, color: 'bg-rose-500', total: analytics.stats?.totalShops || 1 },
+                    ].map((item, i) => (
+                      <div key={i} className="space-y-2">
+                        <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
+                          <span>{item.label}</span>
+                          <span className="text-white/40">{item.count} stores</span>
+                        </div>
+                        <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                          <motion.div 
+                            initial={{ width: 0 }}
+                            animate={{ width: `${(item.count / item.total) * 100}%` }}
+                            className={`h-full ${item.color}`} 
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-br from-blue-600/20 to-transparent border border-white/5 p-10 rounded-[40px] flex flex-col justify-center items-center text-center">
+                  <div className="w-20 h-20 bg-white/10 rounded-3xl flex items-center justify-center mb-6">
+                    <Activity size={32} className="text-blue-400" />
+                  </div>
+                  <h3 className="text-5xl font-black mb-2">{analytics.stats?.totalUsers || 0}</h3>
+                  <p className="text-white/40 font-bold uppercase text-[10px] tracking-widest mb-8">Active Partners</p>
+                  <div className="grid grid-cols-2 gap-8 w-full border-t border-white/5 pt-8">
+                    <div>
+                      <p className="text-xl font-bold">{analytics.stats?.totalProducts || 0}</p>
+                      <p className="text-[10px] text-white/20 font-black uppercase">Products</p>
+                    </div>
+                    <div>
+                      <p className="text-xl font-bold">{analytics.stats?.totalShops || 0}</p>
+                      <p className="text-[10px] text-white/20 font-black uppercase">Shops</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Category Breakdown */}
+                {analytics.categoryStats?.length > 0 && (
+                  <div className="col-span-full bg-white/[0.01] border border-white/5 p-10 rounded-[40px]">
+                    <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white/30 mb-8 text-center">Marketplace Categories</h3>
+                    <div className="flex flex-wrap justify-center gap-6">
+                       {analytics.categoryStats.map((cat, i) => (
+                         <div key={i} className="px-6 py-4 bg-white/5 rounded-2xl border border-white/5 text-center min-w-[140px]">
+                            <p className="text-xl font-black">{cat.count}</p>
+                            <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest truncate">{cat._id || 'General'}</p>
+                         </div>
+                       ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'settings' && (
           <div className="py-20 text-center flex flex-col items-center gap-6">
              <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center animate-pulse">
                 <Settings size={32} className="text-white/10" />
              </div>
              <p className="text-white/20 font-black text-xl sm:text-2xl uppercase tracking-[0.2em] italic">
-               Module Synchronization Active...
+               Admin Module Synchronization Active...
              </p>
           </div>
         )}
