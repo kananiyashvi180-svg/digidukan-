@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { LayoutDashboard, Store, Package, MessageSquare, BarChart3, Settings, ExternalLink, Plus } from 'lucide-react';
+import { Store, Package, MessageSquare, BarChart3, ExternalLink, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
@@ -11,23 +11,27 @@ const API_URL = `${BASE_URL}/api/v1`;
 
 const Dashboard = () => {
   const [shops, setShops] = useState([]);
+  const [stats, setStats] = useState({ totalShops: 0, totalProducts: 0, totalVisitors: 0, newQueries: 0 });
   const [loading, setLoading] = useState(true);
   const { user, token } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    const fetchShops = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(`${API_URL}/shops`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setShops(response.data.data.shops);
+        const [shopsRes, statsRes] = await Promise.all([
+          axios.get(`${API_URL}/shops`, { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get(`${API_URL}/shops/analytics`, { headers: { Authorization: `Bearer ${token}` } })
+        ]);
+        
+        setShops(shopsRes.data.data.shops);
+        setStats(statsRes.data.data);
       } catch (error) {
-        console.error('Error fetching shops', error);
+        console.error('Error fetching dashboard data', error);
       } finally {
         setLoading(false);
       }
     };
-    fetchShops();
+    fetchData();
   }, [token]);
 
   return (
@@ -74,10 +78,10 @@ const Dashboard = () => {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {[
-            { label: 'Total Visitors', value: '1,284', icon: BarChart3, color: '#3b82f6', bg: '#eff6ff' },
-            { label: 'Total Products', value: '24', icon: Package, color: '#8b5cf6', bg: '#f5f3ff' },
-            { label: 'Active Shops', value: shops.length, icon: Store, color: '#10b981', bg: '#ecfdf5' },
-            { label: 'New Queries', value: '12', icon: MessageSquare, color: '#f59e0b', bg: '#fffbeb' },
+            { label: 'Total Visitors', value: stats.totalVisitors, icon: BarChart3, color: '#3b82f6', bg: '#eff6ff' },
+            { label: 'Total Products', value: stats.totalProducts, icon: Package, color: '#8b5cf6', bg: '#f5f3ff' },
+            { label: 'Active Shops', value: stats.totalShops, icon: Store, color: '#10b981', bg: '#ecfdf5' },
+            { label: 'New Queries', value: stats.newQueries, icon: MessageSquare, color: '#f59e0b', bg: '#fffbeb' },
           ].map((stat, i) => (
             <motion.div 
               key={i}

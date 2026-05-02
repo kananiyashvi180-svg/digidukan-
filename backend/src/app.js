@@ -4,7 +4,12 @@ const morgan = require('morgan');
 const path = require('path');
 const dotenv = require('dotenv');
 
+const connectDB = require('./config/db');
+
 dotenv.config();
+
+// Connect to Database
+connectDB();
 
 const app = express();
 
@@ -77,13 +82,27 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Serve frontend in production
+// Serve frontend in production (Only if files exist)
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../../frontend/dist')));
+  const frontendPath = path.join(__dirname, '../../frontend/dist');
+  const fs = require('fs');
   
-  app.use((req, res) => {
-    res.sendFile(path.resolve(__dirname, '../../frontend', 'dist', 'index.html'));
-  });
+  if (fs.existsSync(frontendPath)) {
+    app.use(express.static(frontendPath));
+    
+    app.use((req, res) => {
+      res.sendFile(path.resolve(frontendPath, 'index.html'));
+    });
+  } else {
+    app.get('*', (req, res) => {
+      if (!req.path.startsWith('/api')) {
+        res.status(404).json({ 
+          status: 'error', 
+          message: 'Backend is running, but frontend files were not found in this deployment. If you are using separate deployments, this is normal.' 
+        });
+      }
+    });
+  }
 }
 
 module.exports = app;

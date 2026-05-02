@@ -125,9 +125,10 @@ exports.createShop = async (req, res) => {
 
 exports.getShops = async (req, res) => {
   try {
-    const shops = await Shop.find({ owner: req.user._id });
+    const shops = await Shop.find({ owner: req.user._id }).sort('-createdAt');
     res.status(200).json({
       status: 'success',
+      results: shops.length,
       data: {
         shops
       }
@@ -203,3 +204,33 @@ exports.updateShopStatusAdmin = async (req, res) => {
     });
   }
 };
+
+exports.getShopkeeperAnalytics = async (req, res) => {
+  try {
+    const userShops = await Shop.find({ owner: req.user._id });
+    const shopIds = userShops.map(s => s._id);
+    
+    const totalShops = userShops.length;
+    const totalProducts = await Product.countDocuments({ shop: { $in: shopIds } });
+    
+    // Future placeholders
+    const totalVisitors = 0; 
+    const newQueries = 0;
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        totalShops,
+        totalProducts,
+        totalVisitors,
+        newQueries
+      }
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err.message
+    });
+  }
+};
+
