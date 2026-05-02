@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SEO from '../../components/common/SEO';
 import { motion, AnimatePresence } from 'framer-motion';
 import VoiceRecorder from '../../components/common/VoiceRecorder';
@@ -6,15 +6,42 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { ShoppingBag, Sparkles, Layout, CheckCircle, ArrowRight, Loader2, ChevronLeft, Mic } from 'lucide-react';
+import { ShoppingBag, Sparkles, Layout, CheckCircle, ArrowRight, Loader2, ChevronLeft, Mic, MapPin, Globe } from 'lucide-react';
 import { RURAL_TEMPLATES } from '../../constants/templates';
+import { useTranslation } from 'react-i18next';
+import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+
+// Fix for default marker icon in Leaflet
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
+let DefaultIcon = L.icon({
+    iconUrl: markerIcon,
+    shadowUrl: markerShadow,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41]
+});
+L.Marker.prototype.options.icon = DefaultIcon;
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://digidukan-backend.vercel.app';
 const API_URL = `${BASE_URL}/api/v1`;
 
+const LocationPicker = ({ position, setPosition }) => {
+  useMapEvents({
+    click(e) {
+      setPosition(e.latlng);
+    },
+  });
+  return position ? <Marker position={position} /> : null;
+};
+
 const CreateStore = () => {
+  const { t, i18n } = useTranslation();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [position, setPosition] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     category: '',
@@ -25,17 +52,28 @@ const CreateStore = () => {
     hours: '',
     color: '#3b82f6',
     theme: 'default',
-    products: []
+    products: [],
+    location: null
   });
 
   const { token, user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (position) {
+      setFormData(prev => ({ ...prev, location: { lat: position.lat, lng: position.lng } }));
+    }
+  }, [position]);
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
+
   const handleVoiceTranscript = async (text) => {
     if (!text) return;
     
     setLoading(true);
-    const loadingToast = toast.loading('AI is building your dukan...');
+    const loadingToast = toast.loading(t('processing'));
     
     try {
       const response = await axios.post(`${API_URL}/shops/generate`, { text }, {
@@ -57,7 +95,7 @@ const CreateStore = () => {
       }));
       
       toast.dismiss(loadingToast);
-      toast.success('Dukan details generated! Please review.');
+      toast.success(t('locationSelected'));
       setStep(2);
     } catch (error) {
       toast.dismiss(loadingToast);
@@ -81,7 +119,6 @@ const CreateStore = () => {
     }
     setLoading(true);
     try {
-      // Auto-generate slug if not already set by AI
       const slug = formData.slug || 
         formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') 
         + '-' + Math.random().toString(36).substring(2, 7);
@@ -106,8 +143,15 @@ const CreateStore = () => {
         description="Launch your digital dukan in minutes using voice or text."
         noIndex={true}
       />
+      
+      {/* Language Switcher */}
+      <div className="fixed top-24 right-4 z-50 bg-white/80 backdrop-blur-md p-2 rounded-2xl shadow-lg border border-gray-100 flex space-x-2">
+        <button onClick={() => changeLanguage('en')} className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${i18n.language === 'en' ? 'bg-blue-600 text-white' : 'text-gray-500 hover:bg-gray-100'}`}>EN</button>
+        <button onClick={() => changeLanguage('hi')} className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${i18n.language === 'hi' ? 'bg-blue-600 text-white' : 'text-gray-500 hover:bg-gray-100'}`}>हिन्दी</button>
+        <button onClick={() => changeLanguage('gu')} className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${i18n.language === 'gu' ? 'bg-blue-600 text-white' : 'text-gray-500 hover:bg-gray-100'}`}>ગુજરાતી</button>
+      </div>
+
       <div className="container-custom max-w-4xl">
-        {/* Progress Header */}
         <div className="mb-8 sm:mb-12">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 mb-6 sm:mb-8">
             <div className="w-full sm:w-auto">
@@ -115,7 +159,7 @@ const CreateStore = () => {
                 <ChevronLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
                 <span>Dashboard</span>
               </Link>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 tracking-tight leading-tight">Setup Your <span className="text-blue-600">Digital Dukan</span></h1>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 tracking-tight leading-tight">{t('createStore')}</h1>
               <p className="text-gray-500 mt-2 font-medium">Step {step} of 4: <span className="text-gray-900">{
                 step === 1 ? 'Voice Generation' : 
                 step === 2 ? 'Review Details' : 
@@ -123,7 +167,6 @@ const CreateStore = () => {
               }</span></p>
             </div>
             
-            {/* Horizontal Progress Bar */}
             <div className="flex items-center space-x-2 w-full sm:w-auto">
               {[1, 2, 3, 4].map(i => (
                 <div key={i} className="flex-1 sm:flex-none">
@@ -153,8 +196,8 @@ const CreateStore = () => {
                       <Sparkles size={24} />
                     </div>
                     <div>
-                      <h2 className="text-2xl font-bold">Magical AI Builder</h2>
-                      <p className="text-gray-500 text-sm">Just speak about your business in any language.</p>
+                      <h2 className="text-2xl font-bold">{t('generateWithAI')}</h2>
+                      <p className="text-gray-500 text-sm">{t('describeStore')}</p>
                     </div>
                   </div>
                   
@@ -162,7 +205,7 @@ const CreateStore = () => {
                   
                   <div className="mt-12 flex items-center justify-center">
                     <div className="h-px bg-gray-100 flex-1" />
-                    <span className="px-6 text-gray-400 text-[10px] font-black uppercase tracking-widest whitespace-nowrap">Or go manual</span>
+                    <span className="px-6 text-gray-400 text-[10px] font-black uppercase tracking-widest whitespace-nowrap">{t('manualSetup')}</span>
                     <div className="h-px bg-gray-100 flex-1" />
                   </div>
                   
@@ -193,7 +236,7 @@ const CreateStore = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Shop Name</label>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">{t('storeName')}</label>
                   <input 
                     name="name"
                     value={formData.name}
@@ -203,7 +246,7 @@ const CreateStore = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Category</label>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">{t('category')}</label>
                   <input 
                     name="category"
                     value={formData.category}
@@ -223,7 +266,7 @@ const CreateStore = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Phone Number</label>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">{t('phone')}</label>
                   <input 
                     name="phone"
                     value={formData.phone}
@@ -241,6 +284,37 @@ const CreateStore = () => {
                     className="input-responsive"
                     placeholder="e.g. 9 AM - 9 PM"
                   />
+                </div>
+                <div className="md:col-span-2 space-y-2">
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">{t('address')}</label>
+                  <input 
+                    name="address"
+                    value={formData.address}
+                    onChange={handleFormChange}
+                    className="input-responsive"
+                    placeholder="Full shop address"
+                  />
+                </div>
+                
+                {/* Map Integration */}
+                <div className="md:col-span-2 space-y-4">
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-2">
+                    <MapPin size={14} className="text-blue-600" />
+                    {t('selectLocationMap')}
+                  </label>
+                  <div className="h-64 w-full rounded-3xl overflow-hidden border-2 border-gray-100 shadow-inner z-0">
+                    <MapContainer center={[23.0225, 72.5714]} zoom={13} style={{ height: '100%', width: '100%' }}>
+                      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                      <LocationPicker position={position} setPosition={setPosition} />
+                    </MapContainer>
+                  </div>
+                  {position && (
+                    <div className="flex items-center gap-4 text-[10px] font-bold text-blue-600 uppercase tracking-widest bg-blue-50/50 p-3 rounded-xl border border-blue-100">
+                      <span className="flex items-center gap-1"><MapPin size={10} /> {t('locationSelected')}</span>
+                      <span>{t('lat')}: {position.lat.toFixed(4)}</span>
+                      <span>{t('lng')}: {position.lng.toFixed(4)}</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -334,7 +408,7 @@ const CreateStore = () => {
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 block mb-2">Inventory Sync</label>
                   <div className="flex flex-wrap gap-2 mt-3">
                     {formData.products.length > 0 ? formData.products.map((p, i) => (
-                      <span key={i} className="px-4 py-2 bg-white border border-gray-100 rounded-xl text-xs font-bold text-gray-600 shadow-sm">{p}</span>
+                      <span key={i} className="px-4 py-2 bg-white border border-gray-100 rounded-xl text-xs font-bold text-gray-600 shadow-sm">{typeof p === 'string' ? p : p.name}</span>
                     )) : <span className="text-gray-400 italic font-medium">No products added yet</span>}
                   </div>
                 </div>
