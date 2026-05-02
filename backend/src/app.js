@@ -13,25 +13,47 @@ connectDB();
 
 const app = express();
 
-// 1. GLOBAL CORS - MUST BE FIRST
+// 1. ADVANCED CORS MIDDLEWARE (MUST BE FIRST)
 app.use((req, res, next) => {
+  const allowedOrigins = [
+    'https://digidukan-frontend.vercel.app',
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:3000'
+  ];
+  
   const origin = req.headers.origin;
-  res.setHeader('Access-Control-Allow-Origin', origin || '*');
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  
   res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization');
 
+  // Handle Preflight (OPTIONS)
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
   next();
 });
 
-// Also keep the cors package for secondary protection
+// 2. SECONDARY CORS PROTECTION
 app.use(cors({
-  origin: true,
-  credentials: true,
-  optionsSuccessStatus: 200
+  origin: (origin, callback) => {
+    const allowed = [
+      'https://digidukan-frontend.vercel.app',
+      'http://localhost:5173',
+      'http://localhost:3000'
+    ];
+    if (!origin || allowed.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
 }));
 
 app.use(express.json());
