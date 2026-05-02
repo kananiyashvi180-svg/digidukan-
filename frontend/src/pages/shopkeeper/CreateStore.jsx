@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import VoiceRecorder from '../../components/common/VoiceRecorder';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { ShoppingBag, Sparkles, Layout, CheckCircle, ArrowRight, Loader2, ChevronLeft, Mic } from 'lucide-react';
 import { RURAL_TEMPLATES } from '../../constants/templates';
@@ -75,9 +75,18 @@ const CreateStore = () => {
   };
 
   const handleSubmit = async () => {
+    if (!formData.name || !formData.category) {
+      toast.error('Please enter at least a shop name and category.');
+      return;
+    }
     setLoading(true);
     try {
-      await axios.post(`${API_URL}/shops`, formData, {
+      // Auto-generate slug if not already set by AI
+      const slug = formData.slug || 
+        formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') 
+        + '-' + Math.random().toString(36).substring(2, 7);
+
+      await axios.post(`${API_URL}/shops`, { ...formData, slug }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success('Shop submitted! Waiting for handler approval.');
