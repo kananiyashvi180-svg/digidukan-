@@ -1,5 +1,5 @@
-# 🧾 DigiDukan
-### 📍 Map-Based Discovery + Dynamic Website Management Platform
+# 🧾 DigiDukan  
+### 📍 Map-Based Discovery + Dynamic Website Management Platform  
 
 <p align="center">
   <b>Create, customize, and manage your shop website — without coding</b>
@@ -7,14 +7,30 @@
 
 ---
 
-## 🚀 Overview
+## 📖 Project Description
 
-Smart Digital Shop Builder is a web platform designed for local shopkeepers to **create and manage their own digital shop website instantly** using a simple and guided dashboard.
+DigiDukan is a digital platform designed for **local shopkeepers, small businesses, and rural vendors** to create and manage their own shop website without coding knowledge.
 
-The platform uses a **template-based (non-AI) dynamic rendering system**, ensuring:
-- ⚡ Fast performance  
-- 🧑‍💼 Easy usability  
-- 🎨 Full customization  
+The platform provides a simple dashboard-based workflow where users can set up their shop, add products, select templates, manage social links, and publish their shop website instantly.
+
+The system uses a **template-based dynamic rendering engine** instead of AI generation to ensure fast performance, full control, and easy customization.
+
+For better understanding and access:
+
+🎨 Figma Design:  
+https://www.figma.com/design/fGcEshwB9sEUCsuKiADcG8/Portfolio-website-for-video-editors--Community-?node-id=2022-1050&t=InbHi1z5YcyBwJrl-1  
+
+🌐 Live Project:  
+https://digidukan-frontend.vercel.app/  
+
+⚙ Backend API:  
+https://digidukan-backend.vercel.app/  
+
+📬 Postman Documentation:  
+https://documenter.getpostman.com/view/50841047/2sBXqKof5f  
+
+🎥 YouTube Demo:  
+https://www.youtube.com/watch?v=78AnzmEtglU&t=1s  
 
 ---
 
@@ -22,267 +38,224 @@ The platform uses a **template-based (non-AI) dynamic rendering system**, ensuri
 
 Local businesses face major challenges in going digital:
 
-- Lack of technical knowledge (no coding/design skills)  
-- Difficulty in creating and maintaining websites  
-- No support for regional languages  
-- No simple way to update products regularly  
-- Poor online visibility and discoverability  
-- No integration with commonly used platforms like WhatsApp and Instagram  
-- Static websites that cannot adapt to festivals or seasonal changes  
+- Lack of technical knowledge  
+- Difficulty in building websites  
+- Poor online visibility  
+- No easy product management system  
+- Limited customization  
+- No regional language support  
+- Hard to maintain and update content  
 
-Existing tools are often **complex, expensive, and not suitable for small businesses**.
-
----
-
-## 🎯 Objective
-
-To build a **simple, scalable, and user-friendly platform** that enables shopkeepers to:
-
-- 🌐 Create their own website instantly  
-- 🛍️ Manage products dynamically  
-- 🌍 Select preferred language  
-- 📍 Add and display shop location on a map  
-- 🎨 Choose and switch templates anytime  
-- 📸 Upload shop and product images  
-- 📱 Integrate WhatsApp and Instagram  
-- 🔄 Update content in real-time  
+Existing website builders are often expensive and too complex for small businesses.
 
 ---
 
-## 💡 Solution
+## 💡 Solution Overview
 
-The platform provides a **step-by-step guided workflow**:
+DigiDukan solves these problems by providing a simple and guided system where shopkeepers can:
 
-1. User signs up / logs in  
-2. Enters shop details (name, category)  
-3. Selects preferred language  
-4. Adds shop location (auto-detected or manual)  
-5. Chooses a design template  
-6. Uploads shop images and product details  
-7. Generates a fully functional website instantly  
-8. Manages products and updates anytime  
-9. Switches templates based on festivals or seasons  
-10. Connects with customers via WhatsApp and Instagram  
-11. Appears on a map for discovery  
+- Create their digital shop  
+- Add products dynamically  
+- Choose templates  
+- Add location on map  
+- Integrate WhatsApp and Instagram  
+- Manage everything from dashboard  
+
+Workflow:
+
+1. User Signup/Login  
+2. Shop Setup  
+3. Select Language  
+4. Add Location  
+5. Choose Template  
+6. Add Products  
+7. Upload Images  
+8. Publish Website  
+9. Manage Updates  
 
 ---
 
 ## 🌟 Features
 
 ### 🔐 Authentication
-- Login / Signup system  
-- Protected routes  
-
----
+- Login  
+- Signup  
+- Protected Routes  
 
 ### 📊 Dashboard
 - Shop setup  
-- Language selection  
-- Location integration (map auto-fit)  
-- Template selection  
 - Product management  
-- Social links management  
-
----
+- Template management  
+- Social links  
 
 ### 🎨 Template System
-- Pre-designed templates (Grocery, Clothing, Food, etc.)  
-- Dynamic rendering (non-AI)  
-- Festival & seasonal themes  
-- One-click template switching  
+- Grocery template  
+- Fashion template  
+- Restaurant template  
+- Bakery template  
+- Medical template  
+- Cosmetics template  
+- Stationery template  
+- Electronics template  
 
----
+### 🛍 Product Management
+- Add products  
+- Edit products  
+- Delete products  
+- Product categorization  
 
-### 🛍️ Product Management
-- Add / edit / delete products  
-- Upload product images  
-- Categorize products  
-- Real-time updates  
+### 📍 Location Integration
+- Auto-detect location  
+- Manual location setup  
+- Map display  
 
----
-
-### 🏪 Shop Media Upload
-- Upload shop images  
-- Banner and gallery display  
-
----
-
-### 📱 Social Integration
-- WhatsApp (direct order)  
-- Instagram (profile link)  
-
----
-
-### 🗺️ Map Integration
-- Auto-detect shop location  
-- Map pin placement  
-- Nearby shop discovery  
-- Dynamic addition of new shops  
-
----
+### 📱 Social Media Integration
+- WhatsApp integration  
+- Instagram integration  
 
 ### 🌍 Multi-language Support
 - English  
 - Hindi  
 - Gujarati  
 
----
-
 ### 🔄 Real-Time Updates
-- Instant reflection of product and template changes  
-
----
-
-## 🌐 Generated Website Includes
-
-- 🏠 Home Page  
-- 🛍️ Product Listing Page  
-- 🏪 About / Gallery Page  
-- 📍 Location Page (Map)  
-- 📱 Contact Page  
+- Instant product updates  
+- Template switching  
 
 ---
 
 ## ⚙️ Tech Stack
 
-### 🖥️ Frontend
+### Frontend
 - React (Vite)  
 - Tailwind CSS  
-- Material UI (MUI)  
-
----
-
-### 🧭 Routing
-- React Router  
-- Protected Routes  
-- Lazy Loading  
-
----
-
-### 🧠 State Management
+- Material UI  
 - Redux Toolkit  
-  - Auth Slice  
-  - User Slice  
-  - UI Slice  
+- React Router  
 
----
+### Backend
+- Node.js  
+- Express.js  
 
-### 🔌 API Integration
+### Database
+- MongoDB  
+
+### API Integration
 - Axios  
-- Request & Response Interceptors  
 
----
-
-### 🧾 Forms & Validation
+### Form Validation
 - Formik  
 - Yup  
 
----
-
-### ⚡ Performance Optimization
-- Code splitting  
-- Lazy loading  
-- useMemo / useCallback  
+### Deployment
+- Vercel  
 
 ---
 
-### 💾 Storage
-- localStorage (theme, auth)  
-- sessionStorage (temporary data)  
+## 📂 Proper Folder Structure
+
+```bash
+DigiDukan/
+│
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── features/
+│   │   ├── hooks/
+│   │   ├── services/
+│   │   ├── utils/
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   │
+│   ├── package.json
+│   └── vite.config.js
+│
+├── backend/
+│   ├── api/
+│   ├── config/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── server.js
+│   └── package.json
+│
+└── README.md
+```
 
 ---
 
-### 🔔 Additional Features
-- Toast notifications  
-- File upload with preview  
-- Error boundaries  
-- Skeleton loaders  
-- SEO optimization  
-- Accessibility support  
+## 🖼 Project Images / Screenshots
+
+### Landing Page
+(Add Screenshot Here)
+
+### Dashboard
+(Add Screenshot Here)
+
+### Product Management
+(Add Screenshot Here)
+
+### Template Selection
+(Add Screenshot Here)
+
+### Location Setup
+(Add Screenshot Here)
 
 ---
 
 ## 📄 Pages
 
-### 🔐 Authentication
-- Login Page  
-- Signup Page  
+### Authentication Pages
+- Login  
+- Signup  
 
----
-
-### 🏠 Main Pages
-- Home Page  
+### Main Pages
+- Home  
 - Dashboard  
 
----
-
-### 📊 Dashboard Sections
+### Dashboard Sections
 - Shop Setup  
-- Language Selection  
-- Location Setup (Map)  
-- Template Selection  
 - Product Management  
-- Social Links  
-- Template Switching  
+- Template Selection  
+- Social Integration  
+- Location Setup  
 
----
-
-### 🌐 Customer Website Pages
-- Home Page  
-- Product Page  
-- About / Gallery Page  
-- Location Page  
-- Contact Page  
+### Customer Website Pages
+- Home  
+- Products  
+- About  
+- Contact  
+- Location  
 
 ---
 
 ## 🧠 Key Highlights
 
-- ✅ Template-based (non-AI) website generation  
-- ✅ Beginner-friendly interface  
-- ✅ Real-time updates  
-- ✅ Festival-based dynamic UI  
-- ✅ Map-based shop discovery system  
+✅ Template-based website generation  
+✅ Easy for beginners  
+✅ Local shop focused  
+✅ Mobile responsive  
+✅ Real-time updates  
+✅ SEO friendly  
+✅ Map-based discovery  
 
 ---
 
 ## 📈 Impact
 
-- Helps local businesses go digital quickly  
+- Helps local businesses go digital  
 - Increases customer reach  
-- Simplifies website management  
-- Strengthens local business ecosystem  
+- Improves visibility  
+- Simplifies shop management  
 
 ---
+
 ## 🏁 Conclusion
 
-This platform bridges the gap between **offline shops and digital presence**, enabling shopkeepers to build, manage, and grow their business online with ease.
+DigiDukan is a bridge between local offline businesses and the digital world.
 
----
-
-## 🚀 Deployment on Render (Unified)
-
-To deploy the entire platform as a single Web Service on Render:
-
-1. **Connect your GitHub repo** to Render.
-2. **Build Command**: `npm run build` (This runs the frontend build).
-3. **Start Command**: `npm start` (This starts the backend, which serves the frontend).
-4. **Environment Variables**:
-   - `NODE_ENV`: `production`
-   - `MONGODB_URI`: Your MongoDB connection string
-   - `JWT_SECRET`: A secure secret key
-   - `ANTHROPIC_API_KEY`: Your Anthropic API key
-
-## 🚀 Deployment (Separate Services)
-
-If you prefer to deploy them separately:
-
-### Backend (Web Service)
-- **Root Directory**: `backend`
-- **Build Command**: `npm install`
-- **Start Command**: `npm start`
-
-### Frontend (Static Site)
-- **Root Directory**: `frontend`
-- **Build Command**: `npm run build`
-- **Publish Directory**: `dist`
+It makes website creation simple, fast, and practical for every shopkeeper.
